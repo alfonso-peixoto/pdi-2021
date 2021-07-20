@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Projeto 7</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] },
+  TeX: { equationNumbers: { autoNumber: 'all' } }
+});
+</script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<style>
+body > * {
+  max-width: 42em;
+}
+body {
+  font-family: "Roboto Condensed", sans-serif;
+  padding-left: 7.5em;
+  padding-right: 7.5em;
+}
+pre, code {
+  max-width: 50em;
+  font-family: monospace;
+}
+pre.oct-code {
+  border: 1px solid Grey;
+  padding: 5px;
+}
+pre.oct-code-output {
+  margin-left: 2em;
+}
+span.comment {
+  color: ForestGreen;
+}
+span.keyword {
+  color: Blue;
+}
+span.string {
+  color: DarkOrchid;
+}
+footer {
+  margin-top: 2em;
+  font-size: 80%;
+}
+a, a:visited {
+  color: Blue;
+}
+h2 {
+  font-family: "Roboto Condensed", serif;
+  margin-top: 1.5em;
+}
+h2 a, h2 a:visited {
+  color: Black;
+}
+</style>
+
+</head>
+<body>
+<h1>Projeto 7</h1>
+
+<p>Estudante: André Alfonso Peixoto</p>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#node1">Referência</a></li>
+<li><a href="#node2">Descrição:</a></li>
+<li><a href="#node3">Pacotes</a></li>
+<li><a href="#node4">Carregamento da imagem</a></li>
+<li><a href="#node5">Haar</a></li>
+<li><a href="#node6">Daubechies</a></li>
+<li><a href="#node7">Symlet</a></li>
+<li><a href="#node8">Cohen-Daubechies-Feauveau</a></li>
+</ul>
+<h2><a id="node1">Referência</a></h2>
+<p>GONZALEZ, R; WOODS, R; EDDINS, S. Digital Image Processing Using MATLAB 2. 2. ed. Gatesmark Publishing, 2009.
+Mathworks
+Stack Exchange
+Wikipedia</p>
+<h2><a id="node2">Descrição:</a></h2>
+<pre class="oct-code"><span class="comment">%{
+Utilizando a transformada Wavelet e a teoria de sub-bandas
+1. Identificar e analisar ‘ruído’ de uma imagem
+2. Crie um algoritmo simples para subtrair ruído de uma imagem
+   - visualizar e comentar
+%}</span></pre>
+<h2><a id="node3">Pacotes</a></h2>
+<pre class="oct-code">pkg load signal;
+pkg load symbolic;
+pkg load image;</pre>
+<h2><a id="node4">Carregamento da imagem</a></h2>
+<pre class="oct-code">img = imread(<span class="string">"Fig0734(a).tif"</span>);
+figure;
+  imshow(img);
+  title(<span class="string">"Imagem original"</span>);</pre>
+<img src="projeto7-1.png" alt="projeto7-1.png"><h2><a id="node5">Haar</a></h2>
+<p>[c,s] = wavefast(img,3,"haar");
+wavedisplay(c,s,20);
+[~,g8] = wavezero(c,s,3,"haar");
+figure;</p>
+
+<pre class="oct-code"><span class="comment">% imshow(g8);</span>
+  <span class="comment">% title("Reconstrução com Haar");</span>
+<span class="comment">% figure;</span>
+  <span class="comment">% imshow((img - g8),[]);</span>
+  <span class="comment">% title("Diferença de imagem com Haar");</span>
+</pre>
+<h2><a id="node6">Daubechies</a></h2>
+<p>[c,s] = wavefast(img,3,"db4");
+wavedisplay(c,s,20);
+[~,g8] = wavezero(c,s,3,"db4");
+figure;</p>
+
+<pre class="oct-code"><span class="comment">% imshow(g8);</span>
+  <span class="comment">% title("Reconstrução com Daubechies");</span>
+<span class="comment">% figure;</span>
+  <span class="comment">% imshow((img - g8),[]);</span>
+  <span class="comment">% title("Diferença de imagem com Daubechies");</span>
+</pre>
+<h2><a id="node7">Symlet</a></h2>
+<p>[c,s] = wavefast(img,3,"sym4");
+wavedisplay(c,s,20);
+[~,g8] = wavezero(c,s,3,"sym4");
+figure;</p>
+
+<pre class="oct-code"><span class="comment">% imshow(g8);</span>
+  <span class="comment">% title("Reconstrução com Symlet");</span>
+<span class="comment">% figure;</span>
+  <span class="comment">% imshow((img - g8),[]);</span>
+  <span class="comment">% title("Diferença de imagem com Symlet");</span>
+</pre>
+<h2><a id="node8">Cohen-Daubechies-Feauveau</a></h2>
+<p>[c,s] = wavefast(img,3,"bior6.8");
+wavedisplay(c,s,20);
+[~,g8] = wavezero(c,s,3,"bior6.8");
+figure;</p>
+
+<pre class="oct-code"><span class="comment">% imshow(g8);</span>
+  <span class="comment">% title("Reconstrução com Cohen-Daubechies-Feauveau");</span>
+<span class="comment">% figure;</span>
+  <span class="comment">% imshow((img - g8),[]);</span>
+    <span class="comment">% title("Diferença de imagem com Cohen-Daubechies-Feauveau");</span>
+</pre>
+
+<footer>
+<hr>
+<a href="https://www.octave.org">Published with GNU Octave 6.2.0</a>
+</footer>
+<!--
+##### SOURCE BEGIN #####
+%% Projeto 7
+% Estudante: André Alfonso Peixoto
+
+%% Referência
+% GONZALEZ, R; WOODS, R; EDDINS, S. Digital Image Processing Using MATLAB 2. 2. ed. Gatesmark Publishing, 2009.
+% Mathworks
+% Stack Exchange
+% Wikipedia
+%% Descrição:
+%{
+Utilizando a transformada Wavelet e a teoria de sub-bandas
+1. Identificar e analisar ‘ruído’ de uma imagem
+2. Crie um algoritmo simples para subtrair ruído de uma imagem
+   - visualizar e comentar
+%}
+
+%% Pacotes
+pkg load signal;
+pkg load symbolic;
+pkg load image;
+
+%% Carregamento da imagem
+img = imread("Fig0734(a).tif");
+figure;
+  imshow(img);
+  title("Imagem original");
+
+%% Haar
+% [c,s] = wavefast(img,3,"haar");
+% wavedisplay(c,s,20);
+% [~,g8] = wavezero(c,s,3,"haar");
+% figure;
+  % imshow(g8);
+  % title("Reconstrução com Haar");
+% figure;
+  % imshow((img - g8),[]);
+  % title("Diferença de imagem com Haar");
+
+%% Daubechies
+% [c,s] = wavefast(img,3,"db4");
+% wavedisplay(c,s,20);
+% [~,g8] = wavezero(c,s,3,"db4");
+% figure;
+  % imshow(g8);
+  % title("Reconstrução com Daubechies");
+% figure;
+  % imshow((img - g8),[]);
+  % title("Diferença de imagem com Daubechies");
+
+%% Symlet
+% [c,s] = wavefast(img,3,"sym4");
+% wavedisplay(c,s,20);
+% [~,g8] = wavezero(c,s,3,"sym4");
+% figure;
+  % imshow(g8);
+  % title("Reconstrução com Symlet");
+% figure;
+  % imshow((img - g8),[]);
+  % title("Diferença de imagem com Symlet");
+
+%% Cohen-Daubechies-Feauveau
+% [c,s] = wavefast(img,3,"bior6.8");
+% wavedisplay(c,s,20);
+% [~,g8] = wavezero(c,s,3,"bior6.8");
+% figure;
+  % imshow(g8);
+  % title("Reconstrução com Cohen-Daubechies-Feauveau");
+% figure;
+  % imshow((img - g8),[]);
+    % title("Diferença de imagem com Cohen-Daubechies-Feauveau");
+##### SOURCE END #####
+-->
+</body>
+</html>

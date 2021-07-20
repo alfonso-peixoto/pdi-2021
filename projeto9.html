@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Projeto 9</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] },
+  TeX: { equationNumbers: { autoNumber: 'all' } }
+});
+</script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<style>
+body > * {
+  max-width: 42em;
+}
+body {
+  font-family: "Roboto Condensed", sans-serif;
+  padding-left: 7.5em;
+  padding-right: 7.5em;
+}
+pre, code {
+  max-width: 50em;
+  font-family: monospace;
+}
+pre.oct-code {
+  border: 1px solid Grey;
+  padding: 5px;
+}
+pre.oct-code-output {
+  margin-left: 2em;
+}
+span.comment {
+  color: ForestGreen;
+}
+span.keyword {
+  color: Blue;
+}
+span.string {
+  color: DarkOrchid;
+}
+footer {
+  margin-top: 2em;
+  font-size: 80%;
+}
+a, a:visited {
+  color: Blue;
+}
+h2 {
+  font-family: "Roboto Condensed", serif;
+  margin-top: 1.5em;
+}
+h2 a, h2 a:visited {
+  color: Black;
+}
+</style>
+
+</head>
+<body>
+<h1>Projeto 9</h1>
+
+<p>Estudante: André Alfonso Peixoto</p>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#node1">Referência</a></li>
+<li><a href="#node2">Descrição:</a></li>
+<li><a href="#node3">Pacotes</a></li>
+<li><a href="#node4">Figura original</a></li>
+<li><a href="#node5">(a) Identificação de objetos nas bordas</a></li>
+<li><a href="#node6">(b) Identificação de objetos sobrepostos</a></li>
+<li><a href="#node7">(c) Identificação de objetos isolados</a></li>
+<li><a href="#node8">(d) Separação de partículas que não se sobrepõem</a></li>
+</ul>
+<h2><a id="node1">Referência</a></h2>
+<p>GONZALEZ, R; WOODS, R; EDDINS, S. Digital Image Processing Using MATLAB 2. 2. ed. Gatesmark Publishing, 2009.
+Mathworks
+Stack Exchange
+Wikipedia</p>
+<h2><a id="node2">Descrição:</a></h2>
+<pre class="oct-code"><span class="comment">%Uma etapa de pré-processamento para um aplicativo de microscopia aborda o problema de isolar partículas redondas individuais de partículas semelhantes que se sobrepõem em grupos de duas ou mais partículas (ver imagem a seguir**).</span>
+<span class="comment">%Partindo do princípio de que todas as partículas são do mesmo tamanho, proponha um algoritmo morfológico que produza três imagens que possuam, respectivamente:</span>
+<span class="comment">%(a) Apenas partículas que se fundiram com a borda da imagem.</span>
+<span class="comment">%(b) Apenas partículas sobrepostas.</span>
+<span class="comment">%(c) Apenas partículas que não se sobrepõem.</span>
+<span class="comment">%(d) tentar separar Apenas partículas para que não “se sobrepõem” (processar item b depois unir com o restante).</span>
+<span class="comment">%   -- A Ideia é deixar pronto para aplicar um algoritmo de contagem (utilize 'regionprops')</span>
+<span class="comment">%  ** FigP0936(bubbles_on_black_background).tif</span>
+<span class="comment">%</span>
+</pre>
+<h2><a id="node3">Pacotes</a></h2>
+<pre class="oct-code">pkg load signal;
+pkg load symbolic;
+pkg load image;</pre>
+<h2><a id="node4">Figura original</a></h2>
+<pre class="oct-code">img = imread(<span class="string">"FigP0936(bubbles_on_black_background).tif"</span>);
+figure(<span class="string">"Name"</span>,<span class="string">"Figura original"</span>);
+  imshow(img);</pre>
+<img src="projeto9-1.png" alt="projeto9-1.png"><h2><a id="node5">(a) Identificação de objetos nas bordas</a></h2>
+<pre class="oct-code">img_bordas = bwareaopen(img,5000);
+figure(<span class="string">"Name"</span>,<span class="string">"Bordas"</span>);
+  imshow(img_bordas,[]);</pre>
+<img src="projeto9-2.png" alt="projeto9-2.png"><h2><a id="node6">(b) Identificação de objetos sobrepostos</a></h2>
+<pre class="oct-code">imgBordasSobrepostas = bwareaopen(img,570);
+imgSobrepostas = imgBordasSobrepostas - img_bordas;
+figure(<span class="string">"Name"</span>,<span class="string">"Sobrepostas"</span>);
+  imshow(imgSobrepostas,[]);</pre>
+<img src="projeto9-3.png" alt="projeto9-3.png"><h2><a id="node7">(c) Identificação de objetos isolados</a></h2>
+<pre class="oct-code">imgIsoladas = img - imgSobrepostas - img_bordas;
+figure(<span class="string">"Name"</span>,<span class="string">"Isoladas"</span>);
+  imshow(imgIsoladas,[]);</pre>
+<img src="projeto9-4.png" alt="projeto9-4.png"><h2><a id="node8">(d) Separação de partículas que não se sobrepõem</a></h2>
+<pre class="oct-code">imgerode = imerode(img,ones(8,8));
+figure(<span class="string">"Name"</span>,<span class="string">"Nao Sobrepostas"</span>);
+  imshow(imgerode);</pre>
+<img src="projeto9-5.png" alt="projeto9-5.png">
+<footer>
+<hr>
+<a href="https://www.octave.org">Published with GNU Octave 6.2.0</a>
+</footer>
+<!--
+##### SOURCE BEGIN #####
+%% Projeto 9
+% Estudante: André Alfonso Peixoto
+
+%% Referência
+% GONZALEZ, R; WOODS, R; EDDINS, S. Digital Image Processing Using MATLAB 2. 2. ed. Gatesmark Publishing, 2009.
+% Mathworks
+% Stack Exchange
+% Wikipedia
+%% Descrição:
+%Uma etapa de pré-processamento para um aplicativo de microscopia aborda o problema de isolar partículas redondas individuais de partículas semelhantes que se sobrepõem em grupos de duas ou mais partículas (ver imagem a seguir**).
+%Partindo do princípio de que todas as partículas são do mesmo tamanho, proponha um algoritmo morfológico que produza três imagens que possuam, respectivamente:
+%(a) Apenas partículas que se fundiram com a borda da imagem.
+%(b) Apenas partículas sobrepostas.
+%(c) Apenas partículas que não se sobrepõem.
+%(d) tentar separar Apenas partículas para que não “se sobrepõem” (processar item b depois unir com o restante).
+%   -- A Ideia é deixar pronto para aplicar um algoritmo de contagem (utilize 'regionprops')
+%  ** FigP0936(bubbles_on_black_background).tif
+%
+
+%% Pacotes
+pkg load signal;
+pkg load symbolic;
+pkg load image;
+
+%% Figura original
+img = imread("FigP0936(bubbles_on_black_background).tif");
+figure("Name","Figura original");
+  imshow(img);
+
+%% (a) Identificação de objetos nas bordas
+img_bordas = bwareaopen(img,5000);
+figure("Name","Bordas");
+  imshow(img_bordas,[]);
+
+%% (b) Identificação de objetos sobrepostos
+imgBordasSobrepostas = bwareaopen(img,570);
+imgSobrepostas = imgBordasSobrepostas - img_bordas;
+figure("Name","Sobrepostas");
+  imshow(imgSobrepostas,[]);
+
+%% (c) Identificação de objetos isolados
+imgIsoladas = img - imgSobrepostas - img_bordas;
+figure("Name","Isoladas");
+  imshow(imgIsoladas,[]);
+
+%% (d) Separação de partículas que não se sobrepõem
+imgerode = imerode(img,ones(8,8));
+figure("Name","Nao Sobrepostas");
+  imshow(imgerode);
+##### SOURCE END #####
+-->
+</body>
+</html>

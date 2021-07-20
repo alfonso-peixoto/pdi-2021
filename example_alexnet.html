@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>example_alexnet</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] },
+  TeX: { equationNumbers: { autoNumber: 'all' } }
+});
+</script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<style>
+body > * {
+  max-width: 42em;
+}
+body {
+  font-family: "Roboto Condensed", sans-serif;
+  padding-left: 7.5em;
+  padding-right: 7.5em;
+}
+pre, code {
+  max-width: 50em;
+  font-family: monospace;
+}
+pre.oct-code {
+  border: 1px solid Grey;
+  padding: 5px;
+}
+pre.oct-code-output {
+  margin-left: 2em;
+}
+span.comment {
+  color: ForestGreen;
+}
+span.keyword {
+  color: Blue;
+}
+span.string {
+  color: DarkOrchid;
+}
+footer {
+  margin-top: 2em;
+  font-size: 80%;
+}
+a, a:visited {
+  color: Blue;
+}
+h2 {
+  font-family: "Roboto Condensed", serif;
+  margin-top: 1.5em;
+}
+h2 a, h2 a:visited {
+  color: Black;
+}
+</style>
+
+</head>
+<body>
+<h1>example_alexnet</h1>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#node1">Classify images</a></li>
+<li><a href="#node2">Task 1</a></li>
+<li><a href="#node3">Load pretrained network</a></li>
+<li><a href="#node4">Task 2</a></li>
+<li><a href="#node5">Classify an image</a></li>
+<li><a href="#node6">Task 3</a></li>
+<li><a href="#node7">Classify further images</a></li>
+</ul>
+
+<pre class="oct-code">close all;clear;clc</pre>
+<h2><a id="node1">Classify images</a></h2>
+<p>Instructions are in the task pane to the left. Complete and submit each task one at a time.</p>
+<h2><a id="node2">Task 1</a></h2><h2><a id="node3">Load pretrained network</a></h2>
+<pre class="oct-code">deepnet2 = alexnet;
+
+<span class="comment">% displays the image in file01.jpg.</span>
+img1 = imread(<span class="string">'file01.jpeg'</span>);
+img1 = imresize(img1, [227 227]);
+figure; imshow(img1)</pre>
+
+<pre class="oct-code-output">error: 'alexnet' undefined near line 1, column 1
+	in:
+
+deepnet2 = alexnet;
+
+% displays the image in file01.jpg.
+img1 = imread('file01.jpeg');
+img1 = imresize(img1, [227 227]);
+figure; imshow(img1)
+</pre>
+<h2><a id="node4">Task 2</a></h2><h2><a id="node5">Classify an image</a></h2>
+<pre class="oct-code">pred1 = classify(deepnet,img1)
+
+<span class="comment">%text(pred1)</span>
+
+
+<span class="comment">% displays the images in file02.jpg and file03.jpg.</span>
+img2 = imread(<span class="string">'file02.jpeg'</span>);
+img2 = imresize(img2, [227 227]);
+figure; imshow(img2)
+img3 = imread(<span class="string">'file03.jpeg'</span>);
+img3 = imresize(img3, [227 227]);
+figure; imshow(img3)
+
+img4 = imread(<span class="string">'teste1.jpeg'</span>);
+img4 = imresize(img4, [227 227]);
+figure; imshow(img4)</pre>
+
+<pre class="oct-code-output">error: 'deepnet' undefined near line 1, column 1
+	in:
+
+pred1 = classify(deepnet,img1)
+
+%text(pred1)
+
+
+% displays the images in file02.jpg and file03.jpg.
+img2 = imread('file02.jpeg');
+img2 = imresize(img2, [227 227]);
+figure; imshow(img2)
+img3 = imread('file03.jpeg');
+img3 = imresize(img3, [227 227]);
+figure; imshow(img3)
+
+img4 = imread('teste1.jpeg');
+img4 = imresize(img4, [227 227]);
+figure; imshow(img4)
+</pre>
+<h2><a id="node6">Task 3</a></h2><h2><a id="node7">Classify further images</a></h2>
+<pre class="oct-code">pred2 = classify(deepnet,img2)
+pred3 = classify(deepnet,img3)
+pred4 = classify(deepnet,img4)</pre>
+
+<pre class="oct-code-output">error: 'deepnet' undefined near line 1, column 1
+	in:
+
+pred2 = classify(deepnet,img2)
+pred3 = classify(deepnet,img3)
+pred4 = classify(deepnet,img4)</pre>
+
+<footer>
+<hr>
+<a href="https://www.octave.org">Published with GNU Octave 6.2.0</a>
+</footer>
+<!--
+##### SOURCE BEGIN #####
+close all;clear;clc
+
+%% Classify images
+% Instructions are in the task pane to the left. Complete and submit each task one at a time.
+
+%% Task 1
+%% Load pretrained network
+deepnet2 = alexnet;
+
+% displays the image in file01.jpg.
+img1 = imread('file01.jpeg');
+img1 = imresize(img1, [227 227]);
+figure; imshow(img1)
+
+%% Task 2
+%% Classify an image
+pred1 = classify(deepnet,img1)
+
+%text(pred1)
+
+
+% displays the images in file02.jpg and file03.jpg.
+img2 = imread('file02.jpeg');
+img2 = imresize(img2, [227 227]);
+figure; imshow(img2)
+img3 = imread('file03.jpeg');
+img3 = imresize(img3, [227 227]);
+figure; imshow(img3)
+
+img4 = imread('teste1.jpeg');
+img4 = imresize(img4, [227 227]);
+figure; imshow(img4)
+
+%% Task 3
+%% Classify further images
+pred2 = classify(deepnet,img2)
+pred3 = classify(deepnet,img3)
+pred4 = classify(deepnet,img4)
+##### SOURCE END #####
+-->
+</body>
+</html>

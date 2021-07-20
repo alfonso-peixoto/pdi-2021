@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Copyright (C) 2008 Michel D. Schmid &lt;michaelschmid@users.sourceforge.net&gt;</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] },
+  TeX: { equationNumbers: { autoNumber: 'all' } }
+});
+</script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<style>
+body > * {
+  max-width: 42em;
+}
+body {
+  font-family: "Roboto Condensed", sans-serif;
+  padding-left: 7.5em;
+  padding-right: 7.5em;
+}
+pre, code {
+  max-width: 50em;
+  font-family: monospace;
+}
+pre.oct-code {
+  border: 1px solid Grey;
+  padding: 5px;
+}
+pre.oct-code-output {
+  margin-left: 2em;
+}
+span.comment {
+  color: ForestGreen;
+}
+span.keyword {
+  color: Blue;
+}
+span.string {
+  color: DarkOrchid;
+}
+footer {
+  margin-top: 2em;
+  font-size: 80%;
+}
+a, a:visited {
+  color: Blue;
+}
+h2 {
+  font-family: "Roboto Condensed", serif;
+  margin-top: 1.5em;
+}
+h2 a, h2 a:visited {
+  color: Black;
+}
+</style>
+
+</head>
+<body>
+<h1>Copyright (C) 2008 Michel D. Schmid &lt;michaelschmid@users.sourceforge.net&gt;</h1>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#node1">This program is free software; you can redistribute it and/or modify it</a></li>
+<li><a href="#node2">under the terms of the GNU General Public License as published by</a></li>
+<li><a href="#node3">the Free Software Foundation; either version 2, or (at your option)</a></li>
+<li><a href="#node4">any later version.</a></li>
+<li><a href="#node5">This program is distributed in the hope that it will be useful, but</a></li>
+<li><a href="#node6">WITHOUT ANY WARRANTY; without even the implied warranty of</a></li>
+<li><a href="#node7">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU</a></li>
+<li><a href="#node8">General Public License for more details.</a></li>
+<li><a href="#node9">You should have received a copy of the GNU General Public License</a></li>
+<li><a href="#node10">along with this program; see the file COPYING.  If not, see</a></li>
+<li><a href="#node11"><a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</a></li>
+<li><a href="#node12">Running this file will test all function files and tests which are</a></li>
+<li><a href="#node13">available in the nnet package</a></li>
+</ul>
+<h2><a id="node1">This program is free software; you can redistribute it and/or modify it</a></h2><h2><a id="node2">under the terms of the GNU General Public License as published by</a></h2><h2><a id="node3">the Free Software Foundation; either version 2, or (at your option)</a></h2><h2><a id="node4">any later version.</a></h2><h2><a id="node5">This program is distributed in the hope that it will be useful, but</a></h2><h2><a id="node6">WITHOUT ANY WARRANTY; without even the implied warranty of</a></h2><h2><a id="node7">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU</a></h2><h2><a id="node8">General Public License for more details.</a></h2><h2><a id="node9">You should have received a copy of the GNU General Public License</a></h2><h2><a id="node10">along with this program; see the file COPYING.  If not, see</a></h2><h2><a id="node11"><a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</a></h2><h2><a id="node12">Running this file will test all function files and tests which are</a></h2><h2><a id="node13">available in the nnet package</a></h2>
+<pre class="oct-code"><span class="comment"># change to directory where the function files are</span>
+cd inst
+
+<span class="comment"># now run the function files in functional order if needed</span>
+test __analyzerows
+test __copycoltopos1
+
+test isposint
+test min_max
+test newff</pre>
+
+<pre class="oct-code-output">testing __analyzerows
+PASSES 12 out of 12 tests
+testing __copycoltopos1
+PASSES 4 out of 4 tests
+testing isposint
+warning: Matlab-style short-circuit operation performed for operator |
+warning: called from
+    isposint at line 45 column 3
+    __test__ at line 2 column 1
+    test at line 677 column 11
+    publish&gt;eval_code_helper at line 1066 column 8
+    publish&gt;eval_code at line 983 column 30
+    publish at line 401 column 9
+ 
+warning: Matlab-style short-circuit operation performed for operator |
+warning: called from
+    isposint at line 45 column 3
+    __test__ at line 2 column 1
+    test at line 677 column 11
+    publish&gt;eval_code_helper at line 1066 column 8
+    publish&gt;eval_code at line 983 column 30
+    publish at line 401 column 9
+ 
+warning: Matlab-style short-circuit operation performed for operator |
+warning: called from
+    isposint at line 45 column 3
+    __test__ at line 2 column 1
+    test at line 677 column 11
+    publish&gt;eval_code_helper at line 1066 column 8
+    publish&gt;eval_code at line 983 column 30
+    publish at line 401 column 9
+ 
+PASSES 7 out of 7 tests
+testing min_max
+PASSES 5 out of 5 tests
+testing newff
+warning: using continuation marker \ outside of double quoted strings is deprecated and will be removed from a future version of Octave, use ... instead
+warning: called from
+    test at line 675 column 11
+    publish&gt;eval_code_helper at line 1066 column 8
+    publish&gt;eval_code at line 983 column 30
+    publish at line 401 column 9
+ 
+warning: using continuation marker \ outside of double quoted strings is deprecated and will be removed from a future version of Octave, use ... instead
+warning: called from
+    test at line 675 column 11
+    publish&gt;eval_code_helper at line 1066 column 8
+    publish&gt;eval_code at line 983 column 30
+    publish at line 401 column 9
+ 
+warning: using continuation marker \ outside of double quoted strings is deprecated and will be removed from a future version of Octave, use ... instead
+warning: called from
+    test at line 675 column 11
+    publish&gt;eval_code_helper at line 1066 column 8
+    publish&gt;eval_code at line 983 column 30
+    publish at line 401 column 9
+ 
+warning: using continuation marker \ outside of double quoted strings is deprecated and will be removed from a future version of Octave, use ... instead
+warning: called from
+    test at line 675 column 11
+    publish&gt;eval_code_helper at line 1066 column 8
+    publish&gt;eval_code at line 983 column 30
+    publish at line 401 column 9
+ 
+warning: Matlab-style short-circuit operation performed for operator |
+warning: called from
+    newff&gt;checkInputArgs at line 195 column 7
+    newff at line 98 column 3
+    fail at line 130 column 7
+    __test__ at line 4 column 2
+    test at line 677 column 11
+    publish&gt;eval_code_helper at line 1066 column 8
+    publish&gt;eval_code at line 983 column 30
+    publish at line 401 column 9
+ 
+PASSES 8 out of 8 tests
+</pre>
+
+<footer>
+<hr>
+<a href="https://www.octave.org">Published with GNU Octave 6.2.0</a>
+</footer>
+<!--
+##### SOURCE BEGIN #####
+## Copyright (C) 2008 Michel D. Schmid <michaelschmid@users.sourceforge.net>
+##
+##
+## This program is free software; you can redistribute it and/or modify it
+## under the terms of the GNU General Public License as published by
+## the Free Software Foundation; either version 2, or (at your option)
+## any later version.
+##
+## This program is distributed in the hope that it will be useful, but
+## WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+## General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with this program; see the file COPYING.  If not, see
+## <http://www.gnu.org/licenses/>.
+
+## Running this file will test all function files and tests which are
+## available in the nnet package
+
+# change to directory where the function files are
+cd inst
+
+# now run the function files in functional order if needed
+test __analyzerows
+test __copycoltopos1
+
+test isposint
+test min_max
+test newff
+##### SOURCE END #####
+-->
+</body>
+</html>

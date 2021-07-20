@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Projeto 11</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] },
+  TeX: { equationNumbers: { autoNumber: 'all' } }
+});
+</script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<style>
+body > * {
+  max-width: 42em;
+}
+body {
+  font-family: "Roboto Condensed", sans-serif;
+  padding-left: 7.5em;
+  padding-right: 7.5em;
+}
+pre, code {
+  max-width: 50em;
+  font-family: monospace;
+}
+pre.oct-code {
+  border: 1px solid Grey;
+  padding: 5px;
+}
+pre.oct-code-output {
+  margin-left: 2em;
+}
+span.comment {
+  color: ForestGreen;
+}
+span.keyword {
+  color: Blue;
+}
+span.string {
+  color: DarkOrchid;
+}
+footer {
+  margin-top: 2em;
+  font-size: 80%;
+}
+a, a:visited {
+  color: Blue;
+}
+h2 {
+  font-family: "Roboto Condensed", serif;
+  margin-top: 1.5em;
+}
+h2 a, h2 a:visited {
+  color: Black;
+}
+</style>
+
+</head>
+<body>
+<h1>Projeto 11</h1>
+
+<p>Estudante: André Alfonso Peixoto</p>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#node1">Referência</a></li>
+<li><a href="#node2">Descrição:</a></li>
+<li><a href="#node3">Pacotes</a></li>
+<li><a href="#node4">Exibição da imagem</a></li>
+<li><a href="#node5">PCA para compressão de imagem</a></li>
+<li><a href="#node6">Laço de componentes</a></li>
+</ul>
+<h2><a id="node1">Referência</a></h2>
+<p>GONZALEZ, R; WOODS, R; EDDINS, S. Digital Image Processing Using MATLAB 2. 2. ed. Gatesmark Publishing, 2009.
+Mathworks
+Stack Exchange
+Wikipedia</p>
+<h2><a id="node2">Descrição:</a></h2>
+<pre class="oct-code"><span class="comment">%{
+* Aplicar o PCA para compressão de imagens,utilizando uma quantidade de componentes principais.
+  -- graficar numero de componetes principais vs PSNR
+  --  utilize uma imagem de sua preferencia
+  -- comente
+%}</span></pre>
+<h2><a id="node3">Pacotes</a></h2>
+<pre class="oct-code">pkg load signal;
+pkg load symbolic;
+pkg load image;
+pkg load statistics;
+<span class="comment">%pkg load tisean;</span>
+</pre>
+<h2><a id="node4">Exibição da imagem</a></h2>
+<pre class="oct-code">c_img = imread(<span class="string">"mycoins.jpeg"</span>);
+g_image = c_img;
+figure;
+  imshow(g_image);</pre>
+<img src="projeto11-1.png" alt="projeto11-1.png"><h2><a id="node5">PCA para compressão de imagem</a></h2>
+<pre class="oct-code">mypsnr =[];
+vetor_nComp = 5:5:90;
+
+g_image_d = double(g_image); <span class="comment">%Conversão da imagem para double</span>
+g_image_d_m = mean(g_image_d); <span class="comment">%Cálculo da média da imagem</span>
+g_image_d_m_adjusted = (g_image_d-g_image_d_m); <span class="comment">%Subtração da imagem média</span>
+[coeff,score,~,~,~] = pca(g_image_d_m_adjusted); <span class="comment">%Aplicação do PCA</span>
+</pre>
+
+<pre class="oct-code-output">error: S must be a realmatrix
+	in:
+
+mypsnr =[];
+vetor_nComp = 5:5:90;
+
+g_image_d = double(g_image); %Conversão da imagem para double
+g_image_d_m = mean(g_image_d); %Cálculo da média da imagem
+g_image_d_m_adjusted = (g_image_d-g_image_d_m); %Subtração da imagem média
+[coeff,score,~,~,~] = pca(g_image_d_m_adjusted); %Aplicação do PCA
+</pre>
+<h2><a id="node6">Laço de componentes</a></h2>
+<pre class="oct-code"><span class="keyword">for</span> nComp = vetor_nComp
+  reconstruction = score(:,1:nComp)*coeff(:,1:nComp);
+  final_reconstruction = (reconstruction+g_image_d_m); <span class="comment">%Soma de imagem e imagem médiag</span>
+  final_reconstruction = uint8(final_reconstruction);
+
+  <span class="comment">%Exibição da figura</span>
+  figure;
+    imshow(final_reconstruction);
+    title(num2str(nComp));
+
+  mypsnr = [mypsnr psnr(final_reconstruction,g_image)]; <span class="comment">%Cálculo do PSNR</span>
+<span class="keyword">end</span>
+
+<span class="comment">%%PSNR</span>
+figure;
+  plot(vetor_nComp,mypsnr,<span class="string">"*-"</span>);</pre>
+
+<pre class="oct-code-output">error: 'vetor_nComp' undefined near line 1, column 1
+	in:
+
+for nComp = vetor_nComp
+  reconstruction = score(:,1:nComp)*coeff(:,1:nComp);
+  final_reconstruction = (reconstruction+g_image_d_m); %Soma de imagem e imagem médiag
+  final_reconstruction = uint8(final_reconstruction);
+
+  %Exibição da figura
+  figure;
+    imshow(final_reconstruction);
+    title(num2str(nComp));
+
+  mypsnr = [mypsnr psnr(final_reconstruction,g_image)]; %Cálculo do PSNR
+end
+
+%%PSNR
+figure;
+  plot(vetor_nComp,mypsnr,"*-");</pre>
+
+<footer>
+<hr>
+<a href="https://www.octave.org">Published with GNU Octave 6.2.0</a>
+</footer>
+<!--
+##### SOURCE BEGIN #####
+%% Projeto 11
+% Estudante: André Alfonso Peixoto
+
+%% Referência
+% GONZALEZ, R; WOODS, R; EDDINS, S. Digital Image Processing Using MATLAB 2. 2. ed. Gatesmark Publishing, 2009.
+% Mathworks
+% Stack Exchange
+% Wikipedia
+%% Descrição:
+%{
+* Aplicar o PCA para compressão de imagens,utilizando uma quantidade de componentes principais.
+  -- graficar numero de componetes principais vs PSNR
+  --  utilize uma imagem de sua preferencia
+  -- comente
+%}
+
+%% Pacotes
+pkg load signal;
+pkg load symbolic;
+pkg load image;
+pkg load statistics;
+%pkg load tisean;
+
+%% Exibição da imagem
+c_img = imread("mycoins.jpeg");
+g_image = c_img;
+figure;
+  imshow(g_image);
+
+%% PCA para compressão de imagem
+mypsnr =[];
+vetor_nComp = 5:5:90;
+
+g_image_d = double(g_image); %Conversão da imagem para double
+g_image_d_m = mean(g_image_d); %Cálculo da média da imagem
+g_image_d_m_adjusted = (g_image_d-g_image_d_m); %Subtração da imagem média
+[coeff,score,~,~,~] = pca(g_image_d_m_adjusted); %Aplicação do PCA
+
+%% Laço de componentes
+for nComp = vetor_nComp
+  reconstruction = score(:,1:nComp)*coeff(:,1:nComp);
+  final_reconstruction = (reconstruction+g_image_d_m); %Soma de imagem e imagem médiag
+  final_reconstruction = uint8(final_reconstruction);
+
+  %Exibição da figura
+  figure;
+    imshow(final_reconstruction);
+    title(num2str(nComp));
+
+  mypsnr = [mypsnr psnr(final_reconstruction,g_image)]; %Cálculo do PSNR
+end
+
+%%PSNR
+figure;
+  plot(vetor_nComp,mypsnr,"*-");
+##### SOURCE END #####
+-->
+</body>
+</html>

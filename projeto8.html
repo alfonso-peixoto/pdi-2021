@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Projeto 8</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] },
+  TeX: { equationNumbers: { autoNumber: 'all' } }
+});
+</script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<style>
+body > * {
+  max-width: 42em;
+}
+body {
+  font-family: "Roboto Condensed", sans-serif;
+  padding-left: 7.5em;
+  padding-right: 7.5em;
+}
+pre, code {
+  max-width: 50em;
+  font-family: monospace;
+}
+pre.oct-code {
+  border: 1px solid Grey;
+  padding: 5px;
+}
+pre.oct-code-output {
+  margin-left: 2em;
+}
+span.comment {
+  color: ForestGreen;
+}
+span.keyword {
+  color: Blue;
+}
+span.string {
+  color: DarkOrchid;
+}
+footer {
+  margin-top: 2em;
+  font-size: 80%;
+}
+a, a:visited {
+  color: Blue;
+}
+h2 {
+  font-family: "Roboto Condensed", serif;
+  margin-top: 1.5em;
+}
+h2 a, h2 a:visited {
+  color: Black;
+}
+</style>
+
+</head>
+<body>
+<h1>Projeto 8</h1>
+
+<p>Estudante: André Alfonso Peixoto</p>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#node1">Referência</a></li>
+<li><a href="#node2">Descrição:</a></li>
+<li><a href="#node3">Pacotes</a></li>
+<li><a href="#node4">Imagem</a></li>
+<li><a href="#node5">Variáveis</a></li>
+<li><a href="#node6">Compressão com JPEG</a></li>
+<li><a href="#node7">Compressão com JPEG2000</a></li>
+<li><a href="#node8">Compressão Spiht</a></li>
+<li><a href="#node9">Gráficos</a></li>
+</ul>
+<h2><a id="node1">Referência</a></h2>
+<p>GONZALEZ, R; WOODS, R; EDDINS, S. Digital Image Processing Using MATLAB 2. 2. ed. Gatesmark Publishing, 2009.
+Mathworks
+Stack Exchange
+Wikipedia</p>
+<h2><a id="node2">Descrição:</a></h2>
+<pre class="oct-code"><span class="comment">%Para uma imagem de seu projeto pessoal ou alguma qualquer outra imagem sem compressão.</span>
+<span class="comment">% * Aplique uma compressão de essa imagem (varie algum parâmetro)</span>
+<span class="comment">%   - JPG</span>
+<span class="comment">%   - JPG2000</span>
+<span class="comment">%   - SPIHT (algoritmo que utiliza transformada wavelet)</span>
+<span class="comment">% * plote o gráfico PSNR vs  bpp</span>
+<span class="comment">%   - comente</span>
+<span class="comment">%}</span>
+</pre>
+<h2><a id="node3">Pacotes</a></h2>
+<pre class="oct-code">pkg load signal;
+pkg load symbolic;
+pkg load image;</pre>
+<h2><a id="node4">Imagem</a></h2>
+<pre class="oct-code">filename_ref = <span class="string">"lena_gray_512.tif"</span>;
+img_ref = imread(filename_ref);
+figure;
+  imshow(img_ref);
+  title(<span class="string">"Imagem original (TIFF)"</span>);</pre>
+<img src="projeto8-1.png" alt="projeto8-1.png"><h2><a id="node5">Variáveis</a></h2>
+<pre class="oct-code">bpp_jpg = [];
+my_psnr_jpg = [];
+bpp_jp2 = [];
+my_psnr_jp2 = [];
+bpp_spiht = [];
+my_psnr_spiht = [];</pre>
+<h2><a id="node6">Compressão com JPEG</a></h2>
+<pre class="oct-code"><span class="keyword">for</span> param1 = 10:10:99
+  filename_comp = <span class="string">"lena_gray_512.jpg"</span>;
+  imwrite(img_ref,filename_comp,<span class="string">"Quality"</span>,param1);
+
+  img_compress = imread(filename_comp);
+
+  Cr = imratio(filename_ref,filename_comp);
+
+  bpp_jpg = [8/Cr bpp_jpg];
+  my_psnr_jpg = [psnr(img_ref,img_compress) my_psnr_jpg];
+
+<span class="keyword">end</span></pre>
+
+<pre class="oct-code-output">error: 'imratio' undefined near line 7, column 7
+	in:
+
+for param1 = 10:10:99
+  filename_comp = "lena_gray_512.jpg";
+  imwrite(img_ref,filename_comp,"Quality",param1);
+
+  img_compress = imread(filename_comp);
+
+  Cr = imratio(filename_ref,filename_comp);
+
+  bpp_jpg = [8/Cr bpp_jpg];
+  my_psnr_jpg = [psnr(img_ref,img_compress) my_psnr_jpg];
+
+end
+</pre>
+<h2><a id="node7">Compressão com JPEG2000</a></h2>
+<pre class="oct-code"><span class="keyword">for</span> param1 = 2:10:150
+  filename_comp = <span class="string">"lena_gray_512.jp2"</span>;
+  imwrite(img_ref,filename_comp,<span class="string">"CompressionRatio"</span>,param1);
+
+  img_compress = imread(filename_comp);
+
+  Cr = imratio(filename_ref,filename_comp);
+
+  bpp_jpg = [8/Cr bpp_jp2];
+  my_psnr_jp2 = [psnr(img_ref,uint8(img_compress)) my_psnr_jp2];
+
+<span class="keyword">end</span></pre>
+
+<pre class="oct-code-output">error: imwrite: invalid PARAMETER 'CompressionRatio'
+	in:
+
+for param1 = 2:10:150
+  filename_comp = "lena_gray_512.jp2";
+  imwrite(img_ref,filename_comp,"CompressionRatio",param1);
+
+  img_compress = imread(filename_comp);
+
+  Cr = imratio(filename_ref,filename_comp);
+
+  bpp_jpg = [8/Cr bpp_jp2];
+  my_psnr_jp2 = [psnr(img_ref,uint8(img_compress)) my_psnr_jp2];
+
+end
+</pre>
+<h2><a id="node8">Compressão Spiht</a></h2>
+<pre class="oct-code"><span class="comment">%for param1 = 0.01:0.1:0.9</span>
+<span class="comment">%  filename_comp = "lena_gray_512.wtc";</span>
+<span class="comment">%</span>
+<span class="comment">%  wcompress("c",filename_ref,filename_comp,"spiht","bpp",param1)</span>
+<span class="comment">%</span>
+<span class="comment">%  img_compress = wcompress("u",filename_comp);</span>
+<span class="comment">%</span>
+<span class="comment">%  Cr = imratio(filename_ref,filename_comp);</span>
+<span class="comment">%</span>
+<span class="comment">%  bpp_spiht = [8/Cr bpp_spiht];</span>
+<span class="comment">%  my_psnr_spiht = [psnr(uint8(img_compress),img_ref)my_psnr_spiht];</span>
+<span class="comment">%</span>
+<span class="comment">%end</span>
+</pre>
+<h2><a id="node9">Gráficos</a></h2>
+<pre class="oct-code">figure;
+  plot(bpp_jpg,my_psnr_jpg,<span class="string">"^-r"</span>);
+  hold on;
+plot(bpp_jp2,my_psnr_jp2,<span class="string">"^-b"</span>);
+plot(bpp_spiht,my_psnr_spiht,<span class="string">"^-g"</span>);
+
+ylabel(<span class="string">"PSNR"</span>);
+xlabel(<span class="string">"bpp"</span>);
+title(<span class="string">"Compressão JPG"</span>);</pre>
+<img src="projeto8-2.png" alt="projeto8-2.png">
+<footer>
+<hr>
+<a href="https://www.octave.org">Published with GNU Octave 6.2.0</a>
+</footer>
+<!--
+##### SOURCE BEGIN #####
+%% Projeto 8
+% Estudante: André Alfonso Peixoto
+
+%% Referência
+% GONZALEZ, R; WOODS, R; EDDINS, S. Digital Image Processing Using MATLAB 2. 2. ed. Gatesmark Publishing, 2009.
+% Mathworks
+% Stack Exchange
+% Wikipedia
+%% Descrição:
+%Para uma imagem de seu projeto pessoal ou alguma qualquer outra imagem sem compressão.
+% * Aplique uma compressão de essa imagem (varie algum parâmetro)
+%   - JPG
+%   - JPG2000
+%   - SPIHT (algoritmo que utiliza transformada wavelet)
+% * plote o gráfico PSNR vs  bpp
+%   - comente
+%}
+
+%% Pacotes
+pkg load signal;
+pkg load symbolic;
+pkg load image;
+
+%% Imagem
+filename_ref = "lena_gray_512.tif";
+img_ref = imread(filename_ref);
+figure;
+  imshow(img_ref);
+  title("Imagem original (TIFF)");
+
+%% Variáveis
+bpp_jpg = [];
+my_psnr_jpg = [];
+bpp_jp2 = [];
+my_psnr_jp2 = [];
+bpp_spiht = [];
+my_psnr_spiht = [];
+
+%% Compressão com JPEG
+for param1 = 10:10:99
+  filename_comp = "lena_gray_512.jpg";
+  imwrite(img_ref,filename_comp,"Quality",param1);
+
+  img_compress = imread(filename_comp);
+
+  Cr = imratio(filename_ref,filename_comp);
+
+  bpp_jpg = [8/Cr bpp_jpg];
+  my_psnr_jpg = [psnr(img_ref,img_compress) my_psnr_jpg];
+
+end
+
+%% Compressão com JPEG2000
+for param1 = 2:10:150
+  filename_comp = "lena_gray_512.jp2";
+  imwrite(img_ref,filename_comp,"CompressionRatio",param1);
+
+  img_compress = imread(filename_comp);
+
+  Cr = imratio(filename_ref,filename_comp);
+
+  bpp_jpg = [8/Cr bpp_jp2];
+  my_psnr_jp2 = [psnr(img_ref,uint8(img_compress)) my_psnr_jp2];
+
+end
+
+%% Compressão Spiht
+%for param1 = 0.01:0.1:0.9
+%  filename_comp = "lena_gray_512.wtc";
+%
+%  wcompress("c",filename_ref,filename_comp,"spiht","bpp",param1)
+%
+%  img_compress = wcompress("u",filename_comp);
+%
+%  Cr = imratio(filename_ref,filename_comp);
+%
+%  bpp_spiht = [8/Cr bpp_spiht];
+%  my_psnr_spiht = [psnr(uint8(img_compress),img_ref)my_psnr_spiht];
+%
+%end
+
+%% Gráficos
+figure;
+  plot(bpp_jpg,my_psnr_jpg,"^-r");
+  hold on;
+plot(bpp_jp2,my_psnr_jp2,"^-b");
+plot(bpp_spiht,my_psnr_spiht,"^-g");
+
+ylabel("PSNR");
+xlabel("bpp");
+title("Compressão JPG");
+##### SOURCE END #####
+-->
+</body>
+</html>

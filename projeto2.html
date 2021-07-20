@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Projeto 2</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] },
+  TeX: { equationNumbers: { autoNumber: 'all' } }
+});
+</script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<style>
+body > * {
+  max-width: 42em;
+}
+body {
+  font-family: "Roboto Condensed", sans-serif;
+  padding-left: 7.5em;
+  padding-right: 7.5em;
+}
+pre, code {
+  max-width: 50em;
+  font-family: monospace;
+}
+pre.oct-code {
+  border: 1px solid Grey;
+  padding: 5px;
+}
+pre.oct-code-output {
+  margin-left: 2em;
+}
+span.comment {
+  color: ForestGreen;
+}
+span.keyword {
+  color: Blue;
+}
+span.string {
+  color: DarkOrchid;
+}
+footer {
+  margin-top: 2em;
+  font-size: 80%;
+}
+a, a:visited {
+  color: Blue;
+}
+h2 {
+  font-family: "Roboto Condensed", serif;
+  margin-top: 1.5em;
+}
+h2 a, h2 a:visited {
+  color: Black;
+}
+</style>
+
+</head>
+<body>
+<h1>Projeto 2</h1>
+
+<p>Estudante: André Alfonso Peixoto</p>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#node1">Referência</a></li>
+<li><a href="#node2">Descrição:</a></li>
+<li><a href="#node3">Pacotes</a></li>
+<li><a href="#node4">(1) Halftoning</a></li>
+<li><a href="#node5">(2) Correção de sombreamento</a></li>
+<li><a href="#node6">(3) Diferença de duas imagens</a></li>
+<li><a href="#node7">(4) Region of Interesse (ROI)</a></li>
+</ul>
+<h2><a id="node1">Referência</a></h2>
+<p>GONZALEZ, R; WOODS, R; EDDINS, S. Digital Image Processing Using MATLAB 2. 2. ed. Gatesmark Publishing, 2009.
+Mathworks
+Stack Exchange
+Wikipedia</p>
+<h2><a id="node2">Descrição:</a></h2>
+<pre class="oct-code"><span class="comment">%{
+  (1) Definir e Formalizar
+  - implementar um algoritmo ‘halftoning’ utilizando a técnica de Thresholding (limiarização) fazer de forma simples.
+  - Aplicar a uma imagem escala de cinza.
+(2) Defina a correção de sombreamento de uma imagem.
+  - Aplique a correção de sombreamento de uma imagem
+  - Imagem: tungsten_filament_shaded.tif; padrão: tungsten_sensor_shading.tif
+(3) Aplique a operação diferença de duas imagens.
+  - Imagem: angiography_mask_image.tif; image: angiography_live_ image.tif
+(4) Defina o ROI (Region of Interesse)
+  - Destaque uma ROI de uma imagem
+%}</span></pre>
+<h2><a id="node3">Pacotes</a></h2>
+<pre class="oct-code">pkg load signal;
+pkg load symbolic;
+pkg load image;</pre>
+<h2><a id="node4">(1) Halftoning</a></h2>
+<pre class="oct-code">halft{1} = [0 0 0; 0 0 0; 0 0 0];
+halft{2} = [0 1 0; 0 0 0; 0 0 0];
+halft{3} = [0 1 0; 0 0 0; 0 0 1];
+halft{4} = [1 1 0; 0 0 0; 0 0 1];
+halft{5} = [1 1 0; 0 0 0; 1 0 1];
+halft{6} = [1 1 1; 0 0 0; 1 0 1];
+halft{7} = [1 1 1; 0 0 1; 1 0 1];
+halft{8} = [1 1 1; 0 0 1; 1 1 1];
+halft{9} = [1 1 1; 1 0 1; 1 1 1];
+halft{10} = [1 1 1; 1 1 1; 1 1 1];
+
+img = imread(<span class="string">"einstein.png"</span>);
+imgbw = rgb2gray(img); <span class="comment">% Imagem em preto e branco (BW)</span>
+[M,N] = size(imgbw);
+img_halftoned = (zeros(M*3,N*3)); <span class="comment">%Inclui todos os zeros da matriz (3 valores de cada vez)</span>
+thresh = ceil(((double(imgbw))+1)/(25.5+1));
+
+<span class="keyword">for</span> row = 1:M
+    <span class="keyword">for</span> col = 1:N
+        img_halftoned(row*3-2:row*3,col*3-2:col*3) = halft{thresh(row,col)};
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+subplot(1,2,1);
+imshow(img)
+title(<span class="string">"Imagem original"</span>);
+subplot(1,2,2)
+  imshow(img_halftoned);
+  title(<span class="string">"Halftoning (unit8)"</span>); <span class="comment">%Unsigned integer data type</span>
+clear;</pre>
+<img src="projeto2-1.png" alt="projeto2-1.png"><h2><a id="node5">(2) Correção de sombreamento</a></h2>
+<pre class="oct-code">img = im2double(imread(<span class="string">'tungsten_filament_shaded.bmp'</span>));
+sensor = im2double(imread(<span class="string">'tungsten_sensor_shading.bmp'</span>));
+target = img./sensor; <span class="comment">% Divisão das matrizes (. permite a divisão de matrizes de tamanhos diferentes)</span>
+
+figure
+  subplot(2,2,1);
+    imshow(img);
+    title(<span class="string">"Filamento original"</span>)
+  subplot(2,2,3);
+    imshow(sensor);
+    title(<span class="string">"Sombreamento do sensor"</span>);
+  subplot(2,2,[2 4]);
+    imshow(target, []);
+    title(<span class="string">"Filamento corrigido"</span>);</pre>
+<img src="projeto2-2.png" alt="projeto2-2.png"><h2><a id="node6">(3) Diferença de duas imagens</a></h2>
+<pre class="oct-code">img = im2double(imread(<span class="string">'angiography_live_ image.bmp'</span>));
+mask = im2double(imread(<span class="string">'angiography_mask_image.bmp'</span>));
+target = mask - img; <span class="comment">% Diferença entre as duas imagens</span>
+target = uint8(255*mat2gray(target)); <span class="comment">% Escala de cinza</span>
+
+figure
+  subplot(2,2,1);
+    imshow(img);
+    title(<span class="string">"Imagem original"</span>);
+  subplot(2,2,3);
+    imshow(mask);
+    title(<span class="string">"Imagem da máscara"</span>);
+  subplot(2,2,[2 4]);
+    imshow(target, []);
+    title(<span class="string">"Resultado da diferença"</span>);</pre>
+<img src="projeto2-3.png" alt="projeto2-3.png"><h2><a id="node7">(4) Region of Interesse (ROI)</a></h2>
+<pre class="oct-code">tree = imread(<span class="string">"johann-siemens-tree-unsplash.jpg"</span>);
+roi = tree(500:2000, 2500:4200, 1:3); <span class="comment">%1:3 representa a escala de cores</span>
+
+figure
+  subplot(2,3,[1 2 4 5]);
+    imshow(tree);
+    title(<span class="string">"Imagem original"</span>);
+  subplot(2,3,[3 6]);
+    imshow(roi);
+    title(<span class="string">"ROI"</span>);</pre>
+<img src="projeto2-4.png" alt="projeto2-4.png">
+<footer>
+<hr>
+<a href="https://www.octave.org">Published with GNU Octave 6.2.0</a>
+</footer>
+<!--
+##### SOURCE BEGIN #####
+%% Projeto 2
+% Estudante: André Alfonso Peixoto
+
+%% Referência
+% GONZALEZ, R; WOODS, R; EDDINS, S. Digital Image Processing Using MATLAB 2. 2. ed. Gatesmark Publishing, 2009.
+% Mathworks
+% Stack Exchange
+% Wikipedia
+%% Descrição:
+%{
+  (1) Definir e Formalizar
+  - implementar um algoritmo ‘halftoning’ utilizando a técnica de Thresholding (limiarização) fazer de forma simples.
+  - Aplicar a uma imagem escala de cinza.
+(2) Defina a correção de sombreamento de uma imagem.
+  - Aplique a correção de sombreamento de uma imagem
+  - Imagem: tungsten_filament_shaded.tif; padrão: tungsten_sensor_shading.tif
+(3) Aplique a operação diferença de duas imagens.
+  - Imagem: angiography_mask_image.tif; image: angiography_live_ image.tif
+(4) Defina o ROI (Region of Interesse)
+  - Destaque uma ROI de uma imagem
+%}
+
+%% Pacotes
+pkg load signal;
+pkg load symbolic;
+pkg load image;
+
+%% (1) Halftoning
+halft{1} = [0 0 0; 0 0 0; 0 0 0];
+halft{2} = [0 1 0; 0 0 0; 0 0 0];
+halft{3} = [0 1 0; 0 0 0; 0 0 1];
+halft{4} = [1 1 0; 0 0 0; 0 0 1];
+halft{5} = [1 1 0; 0 0 0; 1 0 1];
+halft{6} = [1 1 1; 0 0 0; 1 0 1];
+halft{7} = [1 1 1; 0 0 1; 1 0 1];
+halft{8} = [1 1 1; 0 0 1; 1 1 1];
+halft{9} = [1 1 1; 1 0 1; 1 1 1];
+halft{10} = [1 1 1; 1 1 1; 1 1 1];
+
+img = imread("einstein.png");
+imgbw = rgb2gray(img); % Imagem em preto e branco (BW)
+[M,N] = size(imgbw);
+img_halftoned = (zeros(M*3,N*3)); %Inclui todos os zeros da matriz (3 valores de cada vez)
+thresh = ceil(((double(imgbw))+1)/(25.5+1));
+
+for row = 1:M
+    for col = 1:N
+        img_halftoned(row*3-2:row*3,col*3-2:col*3) = halft{thresh(row,col)};
+    end
+end
+
+subplot(1,2,1);
+imshow(img)
+title("Imagem original");
+subplot(1,2,2)
+  imshow(img_halftoned);
+  title("Halftoning (unit8)"); %Unsigned integer data type
+clear;
+
+%% (2) Correção de sombreamento
+
+img = im2double(imread('tungsten_filament_shaded.bmp'));
+sensor = im2double(imread('tungsten_sensor_shading.bmp'));
+target = img./sensor; % Divisão das matrizes (. permite a divisão de matrizes de tamanhos diferentes)
+
+figure
+  subplot(2,2,1);
+    imshow(img);
+    title("Filamento original")
+  subplot(2,2,3);
+    imshow(sensor);
+    title("Sombreamento do sensor");
+  subplot(2,2,[2 4]);
+    imshow(target, []);
+    title("Filamento corrigido");
+
+%% (3) Diferença de duas imagens
+
+img = im2double(imread('angiography_live_ image.bmp'));
+mask = im2double(imread('angiography_mask_image.bmp'));
+target = mask - img; % Diferença entre as duas imagens
+target = uint8(255*mat2gray(target)); % Escala de cinza
+
+figure
+  subplot(2,2,1);
+    imshow(img);
+    title("Imagem original");
+  subplot(2,2,3);
+    imshow(mask);
+    title("Imagem da máscara");
+  subplot(2,2,[2 4]);
+    imshow(target, []);
+    title("Resultado da diferença");
+
+%% (4) Region of Interesse (ROI)
+
+tree = imread("johann-siemens-tree-unsplash.jpg");
+roi = tree(500:2000, 2500:4200, 1:3); %1:3 representa a escala de cores
+
+figure
+  subplot(2,3,[1 2 4 5]);
+    imshow(tree);
+    title("Imagem original");
+  subplot(2,3,[3 6]);
+    imshow(roi);
+    title("ROI");
+##### SOURCE END #####
+-->
+</body>
+</html>

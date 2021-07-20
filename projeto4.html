@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Projeto 4</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] },
+  TeX: { equationNumbers: { autoNumber: 'all' } }
+});
+</script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<style>
+body > * {
+  max-width: 42em;
+}
+body {
+  font-family: "Roboto Condensed", sans-serif;
+  padding-left: 7.5em;
+  padding-right: 7.5em;
+}
+pre, code {
+  max-width: 50em;
+  font-family: monospace;
+}
+pre.oct-code {
+  border: 1px solid Grey;
+  padding: 5px;
+}
+pre.oct-code-output {
+  margin-left: 2em;
+}
+span.comment {
+  color: ForestGreen;
+}
+span.keyword {
+  color: Blue;
+}
+span.string {
+  color: DarkOrchid;
+}
+footer {
+  margin-top: 2em;
+  font-size: 80%;
+}
+a, a:visited {
+  color: Blue;
+}
+h2 {
+  font-family: "Roboto Condensed", serif;
+  margin-top: 1.5em;
+}
+h2 a, h2 a:visited {
+  color: Black;
+}
+</style>
+
+</head>
+<body>
+<h1>Projeto 4</h1>
+
+<p>Estudante: André Alfonso Peixoto</p>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#node1">Referência</a></li>
+<li><a href="#node2">Descrição:</a></li>
+<li><a href="#node3">Pacotes</a></li>
+<li><a href="#node4">(1) Filtro passa-altas</a></li>
+<li><a href="#node5">Transformada de Fourier</a></li>
+<li><a href="#node6">Preparação do filtro</a></li>
+<li><a href="#node7">Filtro passa-altas</a></li>
+<li><a href="#node8">Exemplo 1</a></li>
+<li><a href="#node9">Exemplo 2</a></li>
+<li><a href="#node10">Filtro notch (rejeita-notch)</a></li>
+</ul>
+<h2><a id="node1">Referência</a></h2>
+<p>GONZALEZ, R; WOODS, R; EDDINS, S. Digital Image Processing Using MATLAB 2. 2. ed. Gatesmark Publishing, 2009.
+Mathworks
+Stack Exchange
+Wikipedia</p>
+<h2><a id="node2">Descrição:</a></h2>
+<pre class="oct-code"><span class="comment">%{
+* Definir algum filtro passa-baixas, passa-altas, rejeita faixa, passa faixa. Escolha alguns deles.
+    - Aplicar em 3 imagens imagens que tem a necessidade de filtrar na frequência para alguma aplicação. Teste e comente.
+* Definir filtro notch,
+    - Aplicar na imagem ao lado, para remover o efeito Moiré
+%}</span></pre>
+<h2><a id="node3">Pacotes</a></h2>
+<pre class="oct-code">pkg load signal;
+pkg load symbolic;
+pkg load image;</pre>
+<h2><a id="node4">(1) Filtro passa-altas</a></h2><h2><a id="node5">Transformada de Fourier</a></h2>
+<pre class="oct-code">img = imread(<span class="string">"Fig0429(a)(blown_ic).bmp"</span>);
+<span class="comment">%img = rgb2gray(img); % Conversão para preto e branco</span>
+figure;
+  imshow(img,[]);
+  title(<span class="string">"Imagem original"</span>);
+
+imgF = fft2(img); <span class="comment">% Transformada de Fourier</span>
+imgF_n = fftshift(imgF); <span class="comment">% Normalização da transformada de Fourier</span>
+imgF_n2 = 1 * log(1 + abs(imgF_n)); <span class="comment">% Preparação para Transformada de Fourier</span>
+figure
+  imshow(imgF_n2,[]);
+  title(<span class="string">"Transformada de Fourier no espectro de amplitude 1"</span>);</pre>
+<img src="projeto4-1.png" alt="projeto4-1.png"><img src="projeto4-2.png" alt="projeto4-2.png"><h2><a id="node6">Preparação do filtro</a></h2>
+<pre class="oct-code">[M,N] = size(imgF);
+x = linspace(-5,5,N);
+y = linspace(-5,5,M);
+[X,Y] = meshgrid(x,y);</pre>
+<h2><a id="node7">Filtro passa-altas</a></h2><h2><a id="node8">Exemplo 1</a></h2>
+<pre class="oct-code">z = (2.9/sqrt(2*pi).*exp(-(X.^2/2) - (Y.^2/2)));
+z2 = 1.1569-z;
+figure;
+surf(X,Y,z2);
+shading interp
+axis tight
+
+H = fftshift(z2);
+G = imgF.*H; <span class="comment">% Aplicação do filtro passas-altas</span>
+g = ifft2(G);
+figure
+  imshow(abs(g),[]);
+  title(<span class="string">"Figura com filtro passas-altas"</span>);
+
+G_norm = fftshift(G);
+J = 1 * log(1 + abs(G_norm));
+figure;
+imshow(abs(J),[]);</pre>
+<img src="projeto4-3.png" alt="projeto4-3.png"><img src="projeto4-4.png" alt="projeto4-4.png"><img src="projeto4-5.png" alt="projeto4-5.png"><h2><a id="node9">Exemplo 2</a></h2>
+<pre class="oct-code">im2=imread(<span class="string">"lena.bmp"</span>);
+<span class="comment">%im2=double(rgb2gray(im2));</span>
+sigma=9;
+sizei=101;
+[x,y] = meshgrid(-sizei/2:sizei/2,-sizei/2:sizei/2);
+constant = 1/(2*pi*sigma*sigma);
+kernel = constant*exp( -(y.^2 + x.^2 )/(2 * sigma * sigma));
+kernel=kernel/sum(kernel(:));
+
+im2_low = conv2(im2,kernel,<span class="string">'same'</span>);
+
+F = fft2(im2_low);
+IM2 = fft2(im2);
+IM2_high = IM2 - F;
+
+im2_high = ifft2(IM2_high);
+figure;
+imshow(im2_high,[]);
+title(<span class="string">"Filtro passas-alta"</span>);</pre>
+
+<pre class="oct-code-output">warning: imshow: only showing real part of complex image
+warning: called from
+    imshow at line 184 column 5
+    publish&gt;eval_code_helper at line 1066 column 8
+    publish&gt;eval_code at line 983 column 30
+    publish at line 401 column 9
+ 
+</pre>
+<img src="projeto4-6.png" alt="projeto4-6.png"><h2><a id="node10">Filtro notch (rejeita-notch)</a></h2>
+<pre class="oct-code">img = imread(<span class="string">"Fig0421(car_newsprint_sampled_at_75DPI).bmp"</span>);
+<span class="comment">%img = rgb2gray(img);</span>
+[M,N] = size(img);
+
+figure;
+  imshow(img,[]);
+  title(<span class="string">"Imagem original"</span>);
+
+imgF = fft2(img); <span class="comment">% Transformada de Fourier</span>
+imgF_n = fftshift(imgF); <span class="comment">% Normalização da transformada de Fourier</span>
+imgF_n2 = 1 * log(1 + abs(imgF_n)); <span class="comment">% Preparação para Transformada de Fourier</span>
+
+figure;
+  imshow(abs(imgF_n2),[])
+  title(<span class="string">"Filtro notch"</span>);
+
+<span class="comment">%H = ones(M,N);</span>
+<span class="comment">%centros = [56 86 10; 112 82 10; 112 41 10; 55 45 10; 58 166 10;</span>
+<span class="comment">%          114 162 10; 115 203 10; 58 207 10]</span>
+</pre>
+<img src="projeto4-7.png" alt="projeto4-7.png"><img src="projeto4-8.png" alt="projeto4-8.png">
+<footer>
+<hr>
+<a href="https://www.octave.org">Published with GNU Octave 6.2.0</a>
+</footer>
+<!--
+##### SOURCE BEGIN #####
+%% Projeto 4
+% Estudante: André Alfonso Peixoto
+
+%% Referência
+% GONZALEZ, R; WOODS, R; EDDINS, S. Digital Image Processing Using MATLAB 2. 2. ed. Gatesmark Publishing, 2009.
+% Mathworks
+% Stack Exchange
+% Wikipedia
+%% Descrição:
+%{
+* Definir algum filtro passa-baixas, passa-altas, rejeita faixa, passa faixa. Escolha alguns deles.
+    - Aplicar em 3 imagens imagens que tem a necessidade de filtrar na frequência para alguma aplicação. Teste e comente.
+* Definir filtro notch,
+    - Aplicar na imagem ao lado, para remover o efeito Moiré
+%}
+
+%% Pacotes
+pkg load signal;
+pkg load symbolic;
+pkg load image;
+
+%% (1) Filtro passa-altas
+%% Transformada de Fourier
+img = imread("Fig0429(a)(blown_ic).bmp");
+%img = rgb2gray(img); % Conversão para preto e branco
+figure;
+  imshow(img,[]);
+  title("Imagem original");
+
+imgF = fft2(img); % Transformada de Fourier
+imgF_n = fftshift(imgF); % Normalização da transformada de Fourier
+imgF_n2 = 1 * log(1 + abs(imgF_n)); % Preparação para Transformada de Fourier
+figure
+  imshow(imgF_n2,[]);
+  title("Transformada de Fourier no espectro de amplitude 1");
+
+%% Preparação do filtro
+[M,N] = size(imgF);
+x = linspace(-5,5,N);
+y = linspace(-5,5,M);
+[X,Y] = meshgrid(x,y);
+
+
+%% Filtro passa-altas
+%% Exemplo 1
+z = (2.9/sqrt(2*pi).*exp(-(X.^2/2) - (Y.^2/2)));
+z2 = 1.1569-z;
+figure;
+surf(X,Y,z2);
+shading interp
+axis tight
+
+H = fftshift(z2);
+G = imgF.*H; % Aplicação do filtro passas-altas
+g = ifft2(G);
+figure
+  imshow(abs(g),[]);
+  title("Figura com filtro passas-altas");
+
+G_norm = fftshift(G);
+J = 1 * log(1 + abs(G_norm));
+figure;
+imshow(abs(J),[]);
+
+%% Exemplo 2
+
+im2=imread("lena.bmp");
+%im2=double(rgb2gray(im2));
+sigma=9;
+sizei=101;
+[x,y] = meshgrid(-sizei/2:sizei/2,-sizei/2:sizei/2);
+constant = 1/(2*pi*sigma*sigma);
+kernel = constant*exp( -(y.^2 + x.^2 )/(2 * sigma * sigma));
+kernel=kernel/sum(kernel(:));
+
+im2_low = conv2(im2,kernel,'same');
+
+F = fft2(im2_low);
+IM2 = fft2(im2);
+IM2_high = IM2 - F;
+
+im2_high = ifft2(IM2_high);
+figure;
+imshow(im2_high,[]);
+title("Filtro passas-alta");
+
+%% Filtro notch (rejeita-notch)
+img = imread("Fig0421(car_newsprint_sampled_at_75DPI).bmp");
+%img = rgb2gray(img);
+[M,N] = size(img);
+
+figure;
+  imshow(img,[]);
+  title("Imagem original");
+
+imgF = fft2(img); % Transformada de Fourier
+imgF_n = fftshift(imgF); % Normalização da transformada de Fourier
+imgF_n2 = 1 * log(1 + abs(imgF_n)); % Preparação para Transformada de Fourier
+
+figure;
+  imshow(abs(imgF_n2),[])
+  title("Filtro notch");
+
+%H = ones(M,N);
+%centros = [56 86 10; 112 82 10; 112 41 10; 55 45 10; 58 166 10;
+%          114 162 10; 115 203 10; 58 207 10]
+##### SOURCE END #####
+-->
+</body>
+</html>

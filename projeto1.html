@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Projeto 1</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] },
+  TeX: { equationNumbers: { autoNumber: 'all' } }
+});
+</script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<style>
+body > * {
+  max-width: 42em;
+}
+body {
+  font-family: "Roboto Condensed", sans-serif;
+  padding-left: 7.5em;
+  padding-right: 7.5em;
+}
+pre, code {
+  max-width: 50em;
+  font-family: monospace;
+}
+pre.oct-code {
+  border: 1px solid Grey;
+  padding: 5px;
+}
+pre.oct-code-output {
+  margin-left: 2em;
+}
+span.comment {
+  color: ForestGreen;
+}
+span.keyword {
+  color: Blue;
+}
+span.string {
+  color: DarkOrchid;
+}
+footer {
+  margin-top: 2em;
+  font-size: 80%;
+}
+a, a:visited {
+  color: Blue;
+}
+h2 {
+  font-family: "Roboto Condensed", serif;
+  margin-top: 1.5em;
+}
+h2 a, h2 a:visited {
+  color: Black;
+}
+</style>
+
+</head>
+<body>
+<h1>Projeto 1</h1>
+
+<p>Estudante: André Alfonso Peixoto</p>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#node1">Referência</a></li>
+<li><a href="#node2">Descrição:</a></li>
+<li><a href="#node3">Pacotes</a></li>
+<li><a href="#node4">(1) Implementar funções (com parâmetros)</a></li>
+<li><a href="#node5">Sintetizar sinal sin(x)</a></li>
+<li><a href="#node6">Sintetizar sinal cos(x)</a></li>
+<li><a href="#node7">Sintetizar sinal sinc(x)</a></li>
+<li><a href="#node8">Mostrar um degrau unitário de x</a></li>
+<li><a href="#node9">Mostrar um triângulo de x</a></li>
+<li><a href="#node10">Mostrar um retângulo de x</a></li>
+<li><a href="#node11">Mostrar um pulso exponencial de x</a></li>
+<li><a href="#node12">(2) Dilatação e deslocamento do cos(x)</a></li>
+<li><a href="#node13">(3) Derivada e integral do sinc(x)</a></li>
+<li><a href="#node14">Derivada</a></li>
+<li><a href="#node15">Integral</a></li>
+</ul>
+<h2><a id="node1">Referência</a></h2>
+<p>GONZALEZ, R; WOODS, R; EDDINS, S. Digital Image Processing Using MATLAB 2. 2. ed. Gatesmark Publishing, 2009.
+Mathworks
+Stack Exchange
+Wikipedia</p>
+<h2><a id="node2">Descrição:</a></h2>
+<pre class="oct-code"><span class="comment">%{
+  (1) Implementar funções (com parâmetros)
+  Sintetizar sinais: sin(x); cos(x); sinc(x); degrau unitário, triângulo, retângulo, pulso exponencial.
+  Visualizar tais sinais em 2000 pontos ( eixo x onde x sera o tempo, centradas no zero e normalizadas*)
+  (2) Escolha um sinal sintetizado acima. Aplicar uma Dilatação e um Deslocamento
+  Visualizar o sinal original, sinal dilatado e o deslocado. Os três sinais -- original, dilatação e deslocado-- na mesma figura.
+  (3). Escolha um sinal sintetizado acima (1). Processar os sinais sintetizados e aplicar: Integral e a Derivada
+  Visualizar em uma figura o sinal original, a derivada e o comportamento da integral *
+  * a integração pode ser desde o ponto inicial até um ponto t ,  visualizar em t
+%}</span></pre>
+<h2><a id="node3">Pacotes</a></h2>
+<pre class="oct-code">pkg load signal;
+pkg load symbolic;</pre>
+<h2><a id="node4">(1) Implementar funções (com parâmetros)</a></h2><h2><a id="node5">Sintetizar sinal sin(x)</a></h2>
+<pre class="oct-code">close all; clear
+x = linspace(-10, 10, 2000); <span class="comment">% Varia x em 2000 pontos</span>
+y = sin(x); <span class="comment">% Atribui o seno(x) a y</span>
+figure
+  plot(x, y) <span class="comment">%Cria gráfico de sen(x)</span>
+  title(<span class="string">"Seno de x"</span>)</pre>
+<img src="projeto1-1.png" alt="projeto1-1.png"><h2><a id="node6">Sintetizar sinal cos(x)</a></h2>
+<pre class="oct-code">x = linspace(-10, 10, 2000); <span class="comment">% Varia x em 2000 pontos</span>
+y = cos(x); <span class="comment">% Atribui o cosseno(x) a y</span>
+figure
+  plot(x, y) <span class="comment">% Cria gráfico de cos(x)</span>
+  title(<span class="string">"Cosseno de x"</span>)</pre>
+<img src="projeto1-2.png" alt="projeto1-2.png"><h2><a id="node7">Sintetizar sinal sinc(x)</a></h2>
+<pre class="oct-code">close all; clear
+x = linspace(-10, 10, 2000); <span class="comment">% Varia x em 2000 pontos</span>
+y = sinc(x); <span class="comment">% Atribui o sinc(x) a y</span>
+figure
+  plot(x, y) <span class="comment">% Cria gráfico de sinc(x)</span>
+  title(<span class="string">"sinc(x)"</span>)</pre>
+<img src="projeto1-3.png" alt="projeto1-3.png"><h2><a id="node8">Mostrar um degrau unitário de x</a></h2>
+<pre class="oct-code">x = linspace(-10, 10, 2000); <span class="comment">% Varia x em 2000 pontos</span>
+y = heaviside(x); <span class="comment">% Função de Heaviside</span>
+figure
+  plot(x, y) <span class="comment">% Cria gráfico da função de Heaviside</span>
+  title(<span class="string">"Degrau unitario de x"</span>)</pre>
+<img src="projeto1-4.png" alt="projeto1-4.png"><h2><a id="node9">Mostrar um triângulo de x</a></h2>
+<pre class="oct-code">x = linspace(-10, 10, 2000); <span class="comment">% Varia x em 2000 pontos</span>
+y = tripuls(x); <span class="comment">% Atribui pulso triangular à variável triangular</span>
+figure
+  plot(x, y) <span class="comment">% Cria gráfico triangular</span>
+  title(<span class="string">"Triangulo de x"</span>)</pre>
+<img src="projeto1-5.png" alt="projeto1-5.png"><h2><a id="node10">Mostrar um retângulo de x</a></h2>
+<pre class="oct-code">x = linspace(-10, 10, 2000); <span class="comment">% Varia x em 2000 pontos</span>
+y = rectpuls(x); <span class="comment">% Atribui pulso retangular à variável retangular</span>
+figure
+  plot(x, y) <span class="comment">% Cria gráfico retangular</span>
+  title(<span class="string">"Retangulo de x"</span>)</pre>
+<img src="projeto1-6.png" alt="projeto1-6.png"><h2><a id="node11">Mostrar um pulso exponencial de x</a></h2>
+<pre class="oct-code">x = linspace(-10, 10, 2000); <span class="comment">% Varia x de 2000 pontos (centrado em x e normalizado)</span>
+y = exp(x); <span class="comment">% Atribui o exponencial de x a y</span>
+figure
+  plot(x, y) <span class="comment">% Cria gráfico de exp(x)</span>
+  title(<span class="string">"Pulso exponencial"</span>)</pre>
+<img src="projeto1-7.png" alt="projeto1-7.png"><h2><a id="node12">(2) Dilatação e deslocamento do cos(x)</a></h2>
+<pre class="oct-code">x = linspace(-10, 10, 2000); <span class="comment">% Varia x em 2000 pontos</span>
+d = 2; <span class="comment">% Valor da dilatação</span>
+x0 =  1.5; <span class="comment">% Valor do deslocamento</span>
+y = cos(x);
+ydil = cos(x * d); <span class="comment">% Dilatação do cosseno de x</span>
+ydes = cos(x - x0); <span class="comment">% Deslocamento do cosseno de x</span>
+plot(x, y) <span class="comment">% Criar gráfico do cosseno</span>
+hold on
+plot(x, ydil, <span class="string">'-r'</span>) <span class="comment">%Gráfico da dilatação do cosseno</span>
+plot(x, ydes, <span class="string">'-k'</span>) <span class="comment">%Gráfico do deslocamento do cosseno</span>
+  title(<span class="string">"Deslocamento e dilatacao do cosseno"</span>)</pre>
+<img src="projeto1-8.png" alt="projeto1-8.png"><h2><a id="node13">(3) Derivada e integral do sinc(x)</a></h2><h2><a id="node14">Derivada</a></h2>
+<pre class="oct-code">x = linspace(-10, 10, 2000); <span class="comment">% Varia x em 2000 pontos</span>
+y = sinc(2*pi*x); <span class="comment">% Cálculo de sinc(x)</span>
+derivada = diff(y); <span class="comment">% Atribuição da derivada</span>
+figure
+  plot(derivada) <span class="comment">% Cria gráfico da derivada</span>
+  title(<span class="string">"Derivada"</span>)</pre>
+<img src="projeto1-9.png" alt="projeto1-9.png"><h2><a id="node15">Integral</a></h2>
+<pre class="oct-code">x = linspace(-10, 10, 2000); <span class="comment">% Varia x em 2000 pontos</span>
+y = sinc(2*pi*x); <span class="comment">% Cálculo de sinc(x)</span>
+integral = trapz(y(500:500));
+integralCumulativa = cumtrapz(y);
+figure
+plot(integralCumulativa)
+  title(<span class="string">"Integral"</span>)</pre>
+<img src="projeto1-10.png" alt="projeto1-10.png">
+<footer>
+<hr>
+<a href="https://www.octave.org">Published with GNU Octave 6.2.0</a>
+</footer>
+<!--
+##### SOURCE BEGIN #####
+%% Projeto 1
+% Estudante: André Alfonso Peixoto
+
+%% Referência
+% GONZALEZ, R; WOODS, R; EDDINS, S. Digital Image Processing Using MATLAB 2. 2. ed. Gatesmark Publishing, 2009.
+% Mathworks
+% Stack Exchange
+% Wikipedia
+%% Descrição:
+%{
+  (1) Implementar funções (com parâmetros)
+  Sintetizar sinais: sin(x); cos(x); sinc(x); degrau unitário, triângulo, retângulo, pulso exponencial.
+  Visualizar tais sinais em 2000 pontos ( eixo x onde x sera o tempo, centradas no zero e normalizadas*)
+  (2) Escolha um sinal sintetizado acima. Aplicar uma Dilatação e um Deslocamento
+  Visualizar o sinal original, sinal dilatado e o deslocado. Os três sinais -- original, dilatação e deslocado-- na mesma figura.
+  (3). Escolha um sinal sintetizado acima (1). Processar os sinais sintetizados e aplicar: Integral e a Derivada
+  Visualizar em uma figura o sinal original, a derivada e o comportamento da integral *
+  * a integração pode ser desde o ponto inicial até um ponto t ,  visualizar em t
+%}
+
+%% Pacotes
+pkg load signal;
+pkg load symbolic;
+
+%% (1) Implementar funções (com parâmetros)
+
+%% Sintetizar sinal sin(x)
+close all; clear
+x = linspace(-10, 10, 2000); % Varia x em 2000 pontos
+y = sin(x); % Atribui o seno(x) a y
+figure
+  plot(x, y) %Cria gráfico de sen(x)
+  title("Seno de x")
+
+%% Sintetizar sinal cos(x)
+x = linspace(-10, 10, 2000); % Varia x em 2000 pontos
+y = cos(x); % Atribui o cosseno(x) a y
+figure
+  plot(x, y) % Cria gráfico de cos(x)
+  title("Cosseno de x")
+
+%% Sintetizar sinal sinc(x)
+close all; clear
+x = linspace(-10, 10, 2000); % Varia x em 2000 pontos
+y = sinc(x); % Atribui o sinc(x) a y
+figure
+  plot(x, y) % Cria gráfico de sinc(x)
+  title("sinc(x)")
+
+%% Mostrar um degrau unitário de x
+x = linspace(-10, 10, 2000); % Varia x em 2000 pontos
+y = heaviside(x); % Função de Heaviside
+figure
+  plot(x, y) % Cria gráfico da função de Heaviside
+  title("Degrau unitario de x")
+
+%% Mostrar um triângulo de x
+x = linspace(-10, 10, 2000); % Varia x em 2000 pontos
+y = tripuls(x); % Atribui pulso triangular à variável triangular
+figure
+  plot(x, y) % Cria gráfico triangular
+  title("Triangulo de x")
+
+%% Mostrar um retângulo de x
+x = linspace(-10, 10, 2000); % Varia x em 2000 pontos
+y = rectpuls(x); % Atribui pulso retangular à variável retangular
+figure
+  plot(x, y) % Cria gráfico retangular
+  title("Retangulo de x")
+
+%% Mostrar um pulso exponencial de x
+x = linspace(-10, 10, 2000); % Varia x de 2000 pontos (centrado em x e normalizado)
+y = exp(x); % Atribui o exponencial de x a y
+figure
+  plot(x, y) % Cria gráfico de exp(x)
+  title("Pulso exponencial")
+
+%% (2) Dilatação e deslocamento do cos(x)
+
+x = linspace(-10, 10, 2000); % Varia x em 2000 pontos
+d = 2; % Valor da dilatação
+x0 =  1.5; % Valor do deslocamento
+y = cos(x);
+ydil = cos(x * d); % Dilatação do cosseno de x
+ydes = cos(x - x0); % Deslocamento do cosseno de x
+plot(x, y) % Criar gráfico do cosseno
+hold on
+plot(x, ydil, '-r') %Gráfico da dilatação do cosseno
+plot(x, ydes, '-k') %Gráfico do deslocamento do cosseno
+  title("Deslocamento e dilatacao do cosseno")
+
+%% (3) Derivada e integral do sinc(x)
+
+%% Derivada
+x = linspace(-10, 10, 2000); % Varia x em 2000 pontos
+y = sinc(2*pi*x); % Cálculo de sinc(x)
+derivada = diff(y); % Atribuição da derivada
+figure
+  plot(derivada) % Cria gráfico da derivada
+  title("Derivada")
+
+%% Integral
+x = linspace(-10, 10, 2000); % Varia x em 2000 pontos
+y = sinc(2*pi*x); % Cálculo de sinc(x)
+integral = trapz(y(500:500));
+integralCumulativa = cumtrapz(y);
+figure
+plot(integralCumulativa)
+  title("Integral")
+##### SOURCE END #####
+-->
+</body>
+</html>

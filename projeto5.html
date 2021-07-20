@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Projeto 5</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] },
+  TeX: { equationNumbers: { autoNumber: 'all' } }
+});
+</script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<style>
+body > * {
+  max-width: 42em;
+}
+body {
+  font-family: "Roboto Condensed", sans-serif;
+  padding-left: 7.5em;
+  padding-right: 7.5em;
+}
+pre, code {
+  max-width: 50em;
+  font-family: monospace;
+}
+pre.oct-code {
+  border: 1px solid Grey;
+  padding: 5px;
+}
+pre.oct-code-output {
+  margin-left: 2em;
+}
+span.comment {
+  color: ForestGreen;
+}
+span.keyword {
+  color: Blue;
+}
+span.string {
+  color: DarkOrchid;
+}
+footer {
+  margin-top: 2em;
+  font-size: 80%;
+}
+a, a:visited {
+  color: Blue;
+}
+h2 {
+  font-family: "Roboto Condensed", serif;
+  margin-top: 1.5em;
+}
+h2 a, h2 a:visited {
+  color: Black;
+}
+</style>
+
+</head>
+<body>
+<h1>Projeto 5</h1>
+
+<p>Estudante: André Alfonso Peixoto</p>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#node1">Referência</a></li>
+<li><a href="#node2">Descrição:</a></li>
+<li><a href="#node3">Pacotes</a></li>
+<li><a href="#node4">Carregar a imagem</a></li>
+<li><a href="#node5">(1) Reescalar a imagem</a></li>
+<li><a href="#node6">(2) Aplicar ruído imnoise (sal e pimenta)</a></li>
+<li><a href="#node7">(3) Aplicar o filtro de mediana</a></li>
+<li><a href="#node8">(4) Aplicar o filtro mediana (não adaptativa)</a></li>
+</ul>
+<h2><a id="node1">Referência</a></h2>
+<p>GONZALEZ, R; WOODS, R; EDDINS, S. Digital Image Processing Using MATLAB 2. 2. ed. Gatesmark Publishing, 2009.
+Mathworks
+Stack Exchange
+Wikipedia</p>
+<h2><a id="node2">Descrição:</a></h2>
+<pre class="oct-code"><span class="comment">%{
+Ler a imagem I = im2double(imread('Fig0507(a)(ckt-board-orig).tif'))
+* 1. Aplicar o redimensionamento para K=1 ate 4
+   -- reescalar com escala K
+      imresize(I , k)
+   -- aplicar ruido imnoise
+      ( f , 'salt &amp; pepper' , 0.5 )
+   -- aplicar o filtro mediana utilizando matriz de [3 3], [5 5], [7 7] e [9 9] e outros
+      medfilt2  ( g , matriz , 'symmetric' ) ;
+   -- aplicar o filtro mediana adaptativa (tamanho 9 ou outro)
+      adpmedian ( g , 9)
+* Visualizar e comentar o resultado da restauração do filtro mediana e filtro mediana adaptativa
+%}</span></pre>
+<h2><a id="node3">Pacotes</a></h2>
+<pre class="oct-code">pkg load signal;
+pkg load symbolic;
+pkg load image;</pre>
+<h2><a id="node4">Carregar a imagem</a></h2>
+<pre class="oct-code">img = im2double(imread(<span class="string">"Fig0507(a)(ckt-board-orig).tif"</span>));
+imshow(img);
+title(<span class="string">"Figura original"</span>);</pre>
+<img src="projeto5-1.png" alt="projeto5-1.png"><h2><a id="node5">(1) Reescalar a imagem</a></h2>
+<pre class="oct-code"><span class="keyword">for</span> i = 1:4
+  redimension = imresize(img,i);
+  titleName = sprintf(<span class="string">"Escala k=%d"</span>,i);
+  figure;
+    imshow(redimension);
+    title(titleName);
+<span class="keyword">end</span></pre>
+<img src="projeto5-2.png" alt="projeto5-2.png"><img src="projeto5-3.png" alt="projeto5-3.png"><img src="projeto5-4.png" alt="projeto5-4.png"><img src="projeto5-5.png" alt="projeto5-5.png"><h2><a id="node6">(2) Aplicar ruído imnoise (sal e pimenta)</a></h2>
+<pre class="oct-code">imgNoisy = imnoise(img,<span class="string">'salt &amp; pepper'</span>,0.2);
+figure;
+  imshow(imgNoisy);
+  title(<span class="string">"Imagem com ruído de sal e pimenta"</span>);</pre>
+<img src="projeto5-6.png" alt="projeto5-6.png"><h2><a id="node7">(3) Aplicar o filtro de mediana</a></h2>
+<pre class="oct-code">maximum = 9;
+quantity = 5;
+position = 1;
+subplot(1,quantity,position);
+  imshow(imgNoisy);
+  title(<span class="string">"Imagem ruidosa"</span>);
+<span class="keyword">for</span> i = 3:2:maximum
+  position = position + 1;
+  img = mat2gray(medfilt2(imgNoisy,[i,i], <span class="string">"symmetric"</span>));
+  titulo = sprintf(<span class="string">"Filtro de ordem %d"</span>,i);
+  subplot(1, quantity, position);
+    imshow(img);
+    title(titleName);
+<span class="keyword">end</span></pre>
+<img src="projeto5-7.png" alt="projeto5-7.png"><h2><a id="node8">(4) Aplicar o filtro mediana (não adaptativa)</a></h2>
+<pre class="oct-code">img = mat2gray(imgNoisy);
+img = medfilt2(imgNoisy); <span class="comment">%adpmedian não executado com Octave</span>
+subplot(1,2,1);
+  imshow(imgNoisy);
+  title(<span class="string">"Imagem ruidosa"</span>);
+subplot(1,2,2);
+  imshow(img);
+  title(<span class="string">"Imagem filtrada"</span>);</pre>
+<img src="projeto5-8.png" alt="projeto5-8.png">
+<footer>
+<hr>
+<a href="https://www.octave.org">Published with GNU Octave 6.2.0</a>
+</footer>
+<!--
+##### SOURCE BEGIN #####
+%% Projeto 5
+% Estudante: André Alfonso Peixoto
+
+%% Referência
+% GONZALEZ, R; WOODS, R; EDDINS, S. Digital Image Processing Using MATLAB 2. 2. ed. Gatesmark Publishing, 2009.
+% Mathworks
+% Stack Exchange
+% Wikipedia
+%% Descrição:
+%{
+Ler a imagem I = im2double(imread('Fig0507(a)(ckt-board-orig).tif'))
+* 1. Aplicar o redimensionamento para K=1 ate 4
+   -- reescalar com escala K
+      imresize(I , k)
+   -- aplicar ruido imnoise
+      ( f , 'salt & pepper' , 0.5 )
+   -- aplicar o filtro mediana utilizando matriz de [3 3], [5 5], [7 7] e [9 9] e outros
+      medfilt2  ( g , matriz , 'symmetric' ) ;
+   -- aplicar o filtro mediana adaptativa (tamanho 9 ou outro)
+      adpmedian ( g , 9)
+* Visualizar e comentar o resultado da restauração do filtro mediana e filtro mediana adaptativa
+%}
+
+%% Pacotes
+pkg load signal;
+pkg load symbolic;
+pkg load image;
+
+%% Carregar a imagem
+img = im2double(imread("Fig0507(a)(ckt-board-orig).tif"));
+imshow(img);
+title("Figura original");
+
+
+%% (1) Reescalar a imagem
+for i = 1:4
+  redimension = imresize(img,i);
+  titleName = sprintf("Escala k=%d",i);
+  figure;
+    imshow(redimension);
+    title(titleName);
+end
+
+%% (2) Aplicar ruído imnoise (sal e pimenta)
+imgNoisy = imnoise(img,'salt & pepper',0.2);
+figure;
+  imshow(imgNoisy);
+  title("Imagem com ruído de sal e pimenta");
+
+%% (3) Aplicar o filtro de mediana
+maximum = 9;
+quantity = 5;
+position = 1;
+subplot(1,quantity,position);
+  imshow(imgNoisy);
+  title("Imagem ruidosa");
+for i = 3:2:maximum
+  position = position + 1;
+  img = mat2gray(medfilt2(imgNoisy,[i,i], "symmetric"));
+  titulo = sprintf("Filtro de ordem %d",i);
+  subplot(1, quantity, position);
+    imshow(img);
+    title(titleName);
+end
+
+%% (4) Aplicar o filtro mediana (não adaptativa)
+img = mat2gray(imgNoisy);
+img = medfilt2(imgNoisy); %adpmedian não executado com Octave
+subplot(1,2,1);
+  imshow(imgNoisy);
+  title("Imagem ruidosa");
+subplot(1,2,2);
+  imshow(img);
+  title("Imagem filtrada");
+##### SOURCE END #####
+-->
+</body>
+</html>

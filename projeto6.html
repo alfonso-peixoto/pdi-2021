@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Projeto 6</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] },
+  TeX: { equationNumbers: { autoNumber: 'all' } }
+});
+</script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<style>
+body > * {
+  max-width: 42em;
+}
+body {
+  font-family: "Roboto Condensed", sans-serif;
+  padding-left: 7.5em;
+  padding-right: 7.5em;
+}
+pre, code {
+  max-width: 50em;
+  font-family: monospace;
+}
+pre.oct-code {
+  border: 1px solid Grey;
+  padding: 5px;
+}
+pre.oct-code-output {
+  margin-left: 2em;
+}
+span.comment {
+  color: ForestGreen;
+}
+span.keyword {
+  color: Blue;
+}
+span.string {
+  color: DarkOrchid;
+}
+footer {
+  margin-top: 2em;
+  font-size: 80%;
+}
+a, a:visited {
+  color: Blue;
+}
+h2 {
+  font-family: "Roboto Condensed", serif;
+  margin-top: 1.5em;
+}
+h2 a, h2 a:visited {
+  color: Black;
+}
+</style>
+
+</head>
+<body>
+<h1>Projeto 6</h1>
+
+<p>Estudante: André Alfonso Peixoto</p>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#node1">Referência</a></li>
+<li><a href="#node2">Descrição:</a></li>
+<li><a href="#node3">Pacotes</a></li>
+<li><a href="#node4">Exibir imagem</a></li>
+<li><a href="#node5">Conversão para HSV</a></li>
+<li><a href="#node6">Decomposição da imagem</a></li>
+<li><a href="#node7">Máscara de saturação</a></li>
+<li><a href="#node8">Multiplicar a máscara de saturação pela matiz</a></li>
+<li><a href="#node9">Limiarização para destcar regiõe avermelhadas</a></li>
+<li><a href="#node10">Segmentação de regiões avermelhadas</a></li>
+</ul>
+<h2><a id="node1">Referência</a></h2>
+<p>GONZALEZ, R; WOODS, R; EDDINS, S. Digital Image Processing Using MATLAB 2. 2. ed. Gatesmark Publishing, 2009.
+Mathworks
+Stack Exchange
+Wikipedia</p>
+<h2><a id="node2">Descrição:</a></h2>
+<p>Utilizando a imagem da lua de Jupiter,
+1. segmente as regiões de ‘cor avermelhada’.
+2. visualize e comente
+arquivo: Fig0642(a)(jupiter_moon_original).tif</p>
+<h2><a id="node3">Pacotes</a></h2>
+<pre class="oct-code">pkg load signal;
+pkg load symbolic;
+pkg load image;</pre>
+<h2><a id="node4">Exibir imagem</a></h2>
+<pre class="oct-code">rgb = im2double(imread(<span class="string">"Fig0628(b)(jupiter-Io-closeup).tif"</span>));
+[M, N, ~] = size(rgb);
+figure;
+  imshow(rgb,[]);
+  title(<span class="string">"Imagem original"</span>);</pre>
+<img src="projeto6-1.png" alt="projeto6-1.png"><h2><a id="node5">Conversão para HSV</a></h2>
+<pre class="oct-code">HSV = rgb2hsv(rgb);
+figure;
+  imshow(HSV,[]);
+  title(<span class="string">"Imagem original em HSV"</span>);</pre>
+<img src="projeto6-2.png" alt="projeto6-2.png"><h2><a id="node6">Decomposição da imagem</a></h2>
+<pre class="oct-code">H = HSV(:,:,1);
+S = HSV(:,:,2);
+V = HSV(:,:,3);
+figure;
+  imshow(H,[]);
+  title(<span class="string">"Matiz"</span>);
+figure;
+  imshow(S,[]);
+  title(<span class="string">"Saturação"</span>);
+figure;
+  imshow(V,[]);
+  title(<span class="string">"Intensidade"</span>);</pre>
+<img src="projeto6-3.png" alt="projeto6-3.png"><img src="projeto6-4.png" alt="projeto6-4.png"><img src="projeto6-5.png" alt="projeto6-5.png"><h2><a id="node7">Máscara de saturação</a></h2>
+<pre class="oct-code">sbw = double(im2bw(S,0.35));
+figure;
+  imshow(sbw,[]);
+  title(<span class="string">"Máscara de saturação"</span>);</pre>
+<img src="projeto6-6.png" alt="projeto6-6.png"><h2><a id="node8">Multiplicar a máscara de saturação pela matiz</a></h2>
+<pre class="oct-code">hue = H.*sbw;
+figure;
+  imshow(sbw,[]);title(<span class="string">"Máscara de saturação"</span>);
+figure;
+  imshow(H,[]); title(<span class="string">"Matiz"</span>);
+figure;
+  imshow(hue,[]);
+  title(<span class="string">"Máscara de saturação .* matiz"</span>);</pre>
+<img src="projeto6-7.png" alt="projeto6-7.png"><img src="projeto6-8.png" alt="projeto6-8.png"><img src="projeto6-9.png" alt="projeto6-9.png"><h2><a id="node9">Limiarização para destcar regiõe avermelhadas</a></h2>
+<pre class="oct-code">hue2 = zeros(M,N);
+hue2(hue&gt;0.5)=1;
+figure;
+  imshow(hue2,[]);
+  title(<span class="string">"Regiões com cores vermelhas"</span>);</pre>
+<img src="projeto6-10.png" alt="projeto6-10.png"><h2><a id="node10">Segmentação de regiões avermelhadas</a></h2>
+<pre class="oct-code">figure;
+  imshow(rgb,[]);
+  title(<span class="string">"Imagem original RGB"</span>);
+
+figure;
+  imshow(hue2,[]);
+  title(<span class="string">"Regiões avermelhadas"</span>);</pre>
+<img src="projeto6-11.png" alt="projeto6-11.png"><img src="projeto6-12.png" alt="projeto6-12.png">
+<footer>
+<hr>
+<a href="https://www.octave.org">Published with GNU Octave 6.2.0</a>
+</footer>
+<!--
+##### SOURCE BEGIN #####
+%% Projeto 6
+% Estudante: André Alfonso Peixoto
+
+%% Referência
+% GONZALEZ, R; WOODS, R; EDDINS, S. Digital Image Processing Using MATLAB 2. 2. ed. Gatesmark Publishing, 2009.
+% Mathworks
+% Stack Exchange
+% Wikipedia
+%% Descrição:
+% Utilizando a imagem da lua de Jupiter,
+% 1. segmente as regiões de ‘cor avermelhada’.
+% 2. visualize e comente
+% arquivo: Fig0642(a)(jupiter_moon_original).tif
+
+%% Pacotes
+pkg load signal;
+pkg load symbolic;
+pkg load image;
+
+%% Exibir imagem
+rgb = im2double(imread("Fig0628(b)(jupiter-Io-closeup).tif"));
+[M, N, ~] = size(rgb);
+figure;
+  imshow(rgb,[]);
+  title("Imagem original");
+
+%% Conversão para HSV
+HSV = rgb2hsv(rgb);
+figure;
+  imshow(HSV,[]);
+  title("Imagem original em HSV");
+
+%% Decomposição da imagem
+H = HSV(:,:,1);
+S = HSV(:,:,2);
+V = HSV(:,:,3);
+figure;
+  imshow(H,[]);
+  title("Matiz");
+figure;
+  imshow(S,[]);
+  title("Saturação");
+figure;
+  imshow(V,[]);
+  title("Intensidade");
+
+%% Máscara de saturação
+sbw = double(im2bw(S,0.35));
+figure;
+  imshow(sbw,[]);
+  title("Máscara de saturação");
+
+%% Multiplicar a máscara de saturação pela matiz
+hue = H.*sbw;
+figure;
+  imshow(sbw,[]);title("Máscara de saturação");
+figure;
+  imshow(H,[]); title("Matiz");
+figure;
+  imshow(hue,[]);
+  title("Máscara de saturação .* matiz");
+
+%% Limiarização para destcar regiõe avermelhadas
+hue2 = zeros(M,N);
+hue2(hue>0.5)=1;
+figure;
+  imshow(hue2,[]);
+  title("Regiões com cores vermelhas");
+
+%% Segmentação de regiões avermelhadas
+figure;
+  imshow(rgb,[]);
+  title("Imagem original RGB");
+
+figure;
+  imshow(hue2,[]);
+  title("Regiões avermelhadas");
+##### SOURCE END #####
+-->
+</body>
+</html>
